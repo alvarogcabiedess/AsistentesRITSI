@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Enviar datos a Firebase</title>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <h2>Formulario de Contacto</h2>
+  <form id="formulario">
+    <label>Nombre:</label>
+    <input type="text" id="nombre" required><br><br>
+    <label>Email:</label>
+    <input type="email" id="email" required><br><br>
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script>
+    // Configuración de Firebase (obtenida desde tu Firebase Console)
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "TU_DOMINIO.firebaseapp.com",
+      projectId: "TU_PROJECT_ID",
+      storageBucket: "TU_PROJECT_ID.appspot.com",
+      messagingSenderId: "ID",
+      appId: "ID"
+    };
+
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Enviar datos al hacer submit
+    document.getElementById('formulario').addEventListener('submit', function(e) {
+      e.preventDefault(); // Evita recargar la página
+
+      const nombre = document.getElementById('nombre').value;
+      const email = document.getElementById('email').value;
+
+      db.collection("contactos").add({
+        nombre: nombre,
+        email: email,
+        timestamp: new Date()
+      })
+      .then(() => {
+        alert("Datos enviados con éxito.");
+        document.getElementById('formulario').reset();
+      })
+      .catch((error) => {
+        alert("Error al enviar: " + error.message);
+      });
+    });
+  </script>
+</body>
+</html>
